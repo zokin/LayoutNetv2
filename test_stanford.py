@@ -36,7 +36,7 @@ print("Load Models...")
 encoder = initialize_encoder(model_name, num_classes,use_pretrained=True)
 # Full model
 model_ft = SegNet(encoder, num_classes)
-model_ft.load_state_dict(torch.load(weight_path))
+model_ft.load_state_dict(torch.load(weight_path, map_location=torch.device('cpu')))
 
 # Detect if we have a GPU available
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -189,8 +189,8 @@ for file_list in namelist:
     loss_3d += iou3d
 
     # save
-#    print(save_path+file_list[:-3]+'mat')
-#    sio.savemat(save_path+file_list[:-3]+'mat',{'image':inputs.data.cpu().numpy(), 'pred2':cor_img, 'pred':edg_img, 'cor_id':cor_id})
+    print(save_path+file_list[:-3]+'mat')
+    sio.savemat(save_path+file_list[:-3]+'mat',{'image':inputs.data.cpu().numpy(), 'pred2':cor_img, 'pred':edg_img, 'cor_id':cor_id})
 
     torch.cuda.empty_cache()
     del outputs1, outputs, outputs2, outputs22, labels, labels2, inputs, inputs2, loss
